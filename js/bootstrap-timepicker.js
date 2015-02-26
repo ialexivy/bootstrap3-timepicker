@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Timepicker Component for Twitter Bootstrap
  *
  * Copyright 2013 Joris de Wit
@@ -39,8 +39,9 @@
     _init: function() {
       var self = this;
 
-      if (this.showWidgetOnAddonClick && (this.$element.parent().hasClass('input-group') || this.$element.parent().hasClass('input-prepend'))) {
-        this.$element.parent('.input-group, .input-prepend').find('.input-group-addon').on({
+      if (this.showWidgetOnAddonClick && (this.$element.parent().hasClass('input-append') || this.$element.parent().hasClass('input-prepend'))) {
+
+          this.$element.next().on({
           'click.timepicker': $.proxy(this.showWidget, this)
         });
         this.$element.on({
@@ -242,10 +243,10 @@
         templateContent;
 
       if (this.showInputs) {
-        hourTemplate = '<input type="text" data-name="hour" class="bootstrap-timepicker-hour form-control" maxlength="2"/>';
-        minuteTemplate = '<input type="text" data-name="minute" class="bootstrap-timepicker-minute form-control" maxlength="2"/>';
-        secondTemplate = '<input type="text" data-name="second" class="bootstrap-timepicker-second form-control" maxlength="2"/>';
-        meridianTemplate = '<input type="text" data-name="meridian" class="bootstrap-timepicker-meridian form-control" maxlength="2"/>';
+        hourTemplate = '<input type="text" class="bootstrap-timepicker-hour form-control" maxlength="2"/>';
+        minuteTemplate = '<input type="text" class="bootstrap-timepicker-minute form-control" maxlength="2"/>';
+        secondTemplate = '<input type="text" class="bootstrap-timepicker-second form-control" maxlength="2"/>';
+        meridianTemplate = '<input type="text" class="bootstrap-timepicker-meridian form-control" maxlength="2"/>';
       } else {
         hourTemplate = '<span class="bootstrap-timepicker-hour"></span>';
         minuteTemplate = '<span class="bootstrap-timepicker-minute"></span>';
@@ -323,7 +324,7 @@
         return '';
       }
 
-      return this.hour + ':' + (this.minute.toString().length === 1 ? '0' + this.minute : this.minute) + (this.showSeconds ? ':' + (this.second.toString().length === 1 ? '0' + this.second : this.second) : '') + (this.showMeridian ? ' ' + this.meridian : '');
+      return (this.hour.toString().length === 1 ? '0' + this.hour : this.hour) + ':' + (this.minute.toString().length === 1 ? '0' + this.minute : this.minute) + (this.showSeconds ? ':' + (this.second.toString().length === 1 ? '0' + this.second : this.second) : '') + (this.showMeridian ? ' ' + this.meridian : '');
     },
 
     hideWidget: function() {
@@ -924,8 +925,8 @@
       });
     },
 
-    updateElement: function() {
-      this.$element.val(this.getTime()).change();
+    updateElement: function () {
+        this.$element.find('input').val(this.getTime()).change();
     },
 
     updateFromElementVal: function() {
@@ -937,7 +938,7 @@
         return;
       }
 
-      var hour = this.hour,
+        var hour = this.hour.toString().length === 1 ? '0' + this.hour : this.hour,
           minute = this.minute.toString().length === 1 ? '0' + this.minute : this.minute,
           second = this.second.toString().length === 1 ? '0' + this.second : this.second;
 
@@ -997,7 +998,7 @@
 
     widgetKeydown: function(e) {
       var $input = $(e.target),
-          name = $input.data('name');
+          name = $input.attr('class').replace('bootstrap-timepicker-', '');
 
       switch (e.keyCode) {
       case 9: //tab
